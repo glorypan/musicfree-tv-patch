@@ -1,0 +1,42 @@
+name: Build JS Bundle
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout MusicFree 0.6.2
+        uses: actions/checkout@v4
+        with:
+          repository: kaiyuhan/musicfree
+          ref: 0.6.2
+          path: musicfree
+
+      - name: Checkout our patch
+        uses: actions/checkout@v4
+        with:
+          path: patch
+
+      - name: Copy patch files into source
+        run: cp -r patch/src musicfree/
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: musicfree/package-lock.json
+
+      - name: Install dependencies
+        run: cd musicfree && npm install
+
+      - name: Build bundle
+        run: cd musicfree && npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output index.bundle --assets-dest dist
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: musicfree-tv-bundle
+          path: musicfree/index.bundle
