@@ -31,7 +31,7 @@ export default function FocusableItem(props: IFocusableItemProps) {
 const styles = StyleSheet.create({
   focus: {
     borderWidth: rpx(4),
-    borderColor: '#409EFF',
+    borderColor: '#4096ff',
     borderRadius: rpx(12),
   },
 });
