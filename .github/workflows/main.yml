@@ -1,0 +1,31 @@
+name: Build JS Bundle
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout patch code
+        uses: actions/checkout@v4
+        name: Checkout MusicFree 0.6.2 source
+        uses: actions/checkout@v4
+        with:
+          repository:: metowolf/MusicFree
+          ref: 0.6.2
+          path: original
+      - name: Copy our TV patch src
+        run: cp -r ./src ./original/
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: original/package-lock.json
+      - name: Install dependencies
+        run: cd original && npm install
+      - name: Build bundle
+        run: cd original && npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output index.bundle --assets-dest assets
+      - name: Upload bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: tv-index-bundle
+          path: original/index.bundle
