@@ -6,11 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout MusicFree 0.6.2
+      - name: Checkout MusicFree v0.6.0
         uses: actions/checkout@v4
         with:
           repository: maotoumao/MusicFree
-          ref: 0.6.2
+          ref: v0.6.0
           path: musicfree-src
 
       - name: Checkout our patch
